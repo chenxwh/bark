@@ -379,7 +379,9 @@ def generate_text_semantic(
     text = _normalize_whitespace(text)
     assert len(text.strip()) > 0
     if history_prompt is not None:
-        if history_prompt.endswith(".npz"):
+        # FIXME: hardcode .bin extention to allow loading .npz files
+        #        passed as data URI with application/octet-stream MIME type
+        if history_prompt.endswith(".npz") or history_prompt.endswith(".bin"):
             semantic_history = np.load(history_prompt)["semantic_prompt"]
         else:
             assert (history_prompt in ALLOWED_PROMPTS)
@@ -533,7 +535,9 @@ def generate_coarse(
     semantic_to_coarse_ratio = COARSE_RATE_HZ / SEMANTIC_RATE_HZ * N_COARSE_CODEBOOKS
     max_semantic_history = int(np.floor(max_coarse_history / semantic_to_coarse_ratio))
     if history_prompt is not None:
-        if history_prompt.endswith(".npz"):
+        # FIXME: hardcode .bin extention to allow loading .npz files
+        #        passed as data URI with application/octet-stream MIME type
+        if history_prompt.endswith(".npz") or history_prompt.endswith(".bin"):
             x_history = np.load(history_prompt)
         else:
             assert (history_prompt in ALLOWED_PROMPTS)
@@ -686,7 +690,9 @@ def generate_fine(
         and x_coarse_gen.max() <= CODEBOOK_SIZE - 1
     )
     if history_prompt is not None:
-        if history_prompt.endswith(".npz"):
+        # FIXME: hardcode .bin extention to allow loading .npz files
+        #        passed as data URI with application/octet-stream MIME type
+        if history_prompt.endswith(".npz") or history_prompt.endswith(".bin"):
             x_fine_history = np.load(history_prompt)["fine_prompt"]
         else:
             assert (history_prompt in ALLOWED_PROMPTS)
